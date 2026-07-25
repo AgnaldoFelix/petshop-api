@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import petshop_api.dto.TutorResponse
 
 @RestController
 @RequestMapping
@@ -19,7 +20,7 @@ class TutorController(
     fun addTutor(
         @Valid
         @RequestBody tutor: Tutor
-    ): Tutor {
+    ): TutorResponse {
 
         return tutorService.criarTutor(tutor)
 

@@ -1,5 +1,4 @@
 import org.springframework.stereotype.Service
-import petshop_api.dto.TutorRequest
 import petshop_api.dto.TutorResponse
 import petshop_api.entity.Tutor
 import petshop_api.mapper.TutorMapper
@@ -10,7 +9,7 @@ class TutorService(
     private val tutorRepository: TutorRepository
 ) {
 
-    fun criarTutor(request: TutorRequest): TutorResponse {
+    fun criarTutor(request: Tutor): TutorResponse {
 
         val tutor = TutorMapper.toEntity(request)
 
