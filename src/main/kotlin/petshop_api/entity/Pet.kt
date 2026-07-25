@@ -1,0 +1,55 @@
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Size
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.UUID
+import java.util.UUID.randomUUID
+
+@Entity
+class Pet(
+
+    @Id
+    val id: UUID = randomUUID(),
+
+    @Column(nullable = false)
+    val tutorId: UUID,
+
+
+    @Column(nullable = false, length = 100)
+    @NotBlank
+    @Size(max = 100)
+    var nome: String,
+
+    @Column(nullable = true, length = 2)
+    @Size(max = 2)
+    var idade: String,
+
+    @Column(nullable = false, length = 100)
+    @NotBlank
+    @Size(max = 100)
+    val especie: String,
+
+
+    @Column(nullable = true, length = 100)
+    @Size(max = 100)
+    val raca: String,
+
+
+    @Column(nullable = true, length = 20)
+    @NotBlank
+    val dataNascimento: LocalDate?,
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    var updatedAt: LocalDateTime = LocalDateTime.now()
+
+)
