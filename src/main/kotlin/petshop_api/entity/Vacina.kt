@@ -22,7 +22,7 @@ class Vacina (
     @Column(nullable = false, length = 150)
     @Size(max = 150)
     @NotBlank
-    val descricao: String,
+    var descricao: String,
 
 
     @CreationTimestamp
