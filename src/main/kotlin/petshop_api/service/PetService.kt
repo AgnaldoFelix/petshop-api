@@ -1,10 +1,13 @@
 import org.springframework.stereotype.Service
+import petshop_api.entity.Tutor
 import petshop_api.repository.PetRepository
+import petshop_api.repository.TutorRepository
 import java.util.UUID
 
 @Service
 class PetService(
-    private val petRepository: PetRepository
+    private val petRepository: PetRepository,
+    private val tutorRepository: TutorRepository
 ) {
     fun adicionarPet(pet: Pet): Pet {
         val petExists = petRepository.findByName(pet.nome.toString())
@@ -12,15 +15,14 @@ class PetService(
         if (petExists == null) {
             return petRepository.save(pet)
         }
-            return throw Exception("Pet já cadastrado no sistema")
+        return throw Exception("Pet já cadastrado no sistema")
     }
 
-    fun deletarPet(pet: Pet) {
-        if ( petRepository.existsById(pet.id)) {
-            petRepository.deleteById(pet.id)
+    fun deletarPet(id: UUID) {
+        if (!petRepository.existsById(id)) {
+            throw Exception("Pet não encontrado")
         }
-
-        return throw Exception("Pet não exencontrado")
+        petRepository.deleteById(id)
     }
 
     fun listarPets(pet: Pet): List<Pet> {
@@ -33,7 +35,23 @@ class PetService(
 
         petExistente.nome = novosDados.nome
         petExistente.idade = novosDados.idade
+        petExistente.especie = novosDados.especie
 
         return petRepository.save(petExistente)
     }
+
+    fun listarPetsPorTutor(tutorId: UUID): List<Pet> {
+
+        val tutorExiste = tutorRepository.existsById(tutorId)
+        if (!tutorExiste) {
+            throw Exception("Tutor não encontrado")
+        }
+
+        return petRepository.findByTutorId(tutorId)
+    }
+
+    fun buscarPetsPorNome(nome: String): List<Pet> {
+        return petRepository.findByName(nome)
+    }
+
 }
