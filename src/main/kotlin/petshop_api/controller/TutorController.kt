@@ -22,7 +22,7 @@ class TutorController(
         @RequestBody tutor: Tutor
     ): TutorResponse {
 
-        return tutorService.criarTutor(tutor)
+        return tutorService.cadastrarTutor(tutor)
 
     }
 }

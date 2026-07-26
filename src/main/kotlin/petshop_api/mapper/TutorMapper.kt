@@ -1,12 +1,11 @@
 package petshop_api.mapper
 
-import petshop_api.dto.TutorRequest
 import petshop_api.dto.TutorResponse
 import petshop_api.entity.Tutor
 
 object TutorMapper {
 
-    fun toEntity(request: TutorRequest): Tutor {
+    fun toEntity(request: Tutor): Tutor {
         return Tutor(
             nome = request.nome,
             telefone = request.telefone,
