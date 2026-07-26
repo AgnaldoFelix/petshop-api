@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDate
 import java.util.UUID
 
-class PetRequest (
+data class PetRequest (
     @field:NotBlank(message = "O nome é obrigatório")
     @field:Size(max = 150, message = "O nome deve ter no máximo 150 caracteres")
     val nome: String,
