@@ -7,10 +7,8 @@ import java.util.UUID
 class VacinaService (
     private val vacinaRepository: VacinaRepository
 ){
-    fun adicionarVacina(vacina: Vacina): Vacina {
-        val vacinaExists = vacinaRepository.findById(vacina.id)
-
-        if (vacinaExists !== null ) {
+    fun cadastrarVacina(vacina: Vacina): Vacina {
+        if (vacinaRepository.existsById(vacina.id)) {
             throw Exception("Vacina já cadastrada")
         }
 
@@ -28,7 +26,6 @@ class VacinaService (
         }
         return throw Exception("Vacina não exencontrada")
     }
-
 
     fun atualizarVacina(id: UUID, novosDados: Vacina): Vacina {
         val vacinaExistente = vacinaRepository.findById(id)

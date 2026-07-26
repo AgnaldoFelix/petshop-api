@@ -1,6 +1,7 @@
 package petshop_api.entity
 
 import jakarta.persistence.Column
+import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
@@ -10,6 +11,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import java.util.UUID.randomUUID
 
+@Entity
 class Vacina (
     @Id
     val id: UUID = randomUUID(),
