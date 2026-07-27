@@ -35,6 +35,12 @@ class PetVacinaService(
     }
 
     fun aplicarVacina(petVacina: PetVacina): PetVacina {
+       val vacinaAplicada =  petVacinaRepository.existsById(petVacina.id)
+        val petAplicado =  petVacinaRepository.existsById(petVacina.id)
+
+        if(vacinaAplicada == true) {
+            throw Exception("Vacina já aplicada")
+        }
 
         petRepository.findById(petVacina.petId)
             .orElseThrow { Exception("Pet não encontrado") }

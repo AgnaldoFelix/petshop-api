@@ -1,5 +1,8 @@
 import org.springframework.stereotype.Service
+import petshop_api.dto.PetRequest
+import petshop_api.dto.PetResponse
 import petshop_api.entity.Tutor
+import petshop_api.mapper.PetMapper
 import petshop_api.repository.PetRepository
 import petshop_api.repository.TutorRepository
 import java.util.UUID
@@ -9,18 +12,32 @@ class PetService(
     private val petRepository: PetRepository,
     private val tutorRepository: TutorRepository
 ) {
-    fun adicionarPet(pet: Pet): Pet {
-        val petExists = petRepository.findByName(pet.nome.toString())
+    fun adicionarPet(request: PetRequest): PetResponse {
+        // 1. Verifica se já existe um pet com mesmo nome para o mesmo tutor
+        val petExists = petRepository.findByNomeAndTutorId(request.nome, request.tutorId)
 
-        if (petExists == null) {
-            return petRepository.save(pet)
+        // 2. Se existir, lança exceção
+        if (petExists != null) {
+            throw Exception("Pet já cadastrado para este tutor")
         }
-        return throw Exception("Pet já cadastrado no sistema")
+
+        // 3. Converte Request para Entity
+        val pet = PetMapper.toEntity(request)
+
+        // 4. Salva no banco
+        val petSalvo = petRepository.save(pet)
+
+        // 5. Busca o tutor para pegar o nome
+        val tutor = tutorRepository.findById(request.tutorId)
+            .orElseThrow { Exception("Tutor não encontrado") }
+
+        // 6. Converte Entity para Response
+        return PetMapper.toResponse(petSalvo, tutor.nome)
     }
 
     fun deletarPet(id: UUID) {
         if (!petRepository.existsById(id)) {
-            throw Exception("Pet não encontrado")
+            throw Exception("Pet com ID $id não encontrado")
         }
         petRepository.deleteById(id)
     }
@@ -29,15 +46,25 @@ class PetService(
         return petRepository.findAll()
     }
 
-    fun atualizarPet(id: UUID, novosDados: Pet): Pet {
+    fun atualizarPet(id: UUID, novosDados: PetRequest): PetResponse {
         val petExistente = petRepository.findById(id)
             .orElseThrow { Exception("Pet não encontrado") }
 
         petExistente.nome = novosDados.nome
-        petExistente.idade = novosDados.idade
+        petExistente.idade = novosDados.idade.toString()
         petExistente.especie = novosDados.especie
+        petExistente.data_nascimento = novosDados.dataNascimento
 
-        return petRepository.save(petExistente)
+        val petAtualizado = petRepository.save(petExistente)
+
+        val tutor = tutorRepository.findById(petAtualizado.tutor_id)
+            .orElseThrow { Exception("Tutor não encontrado") }
+
+        return PetMapper.toResponse(
+            petAtualizado,
+            tutor.nome,
+
+        )
     }
 
     fun listarPetsPorTutor(tutorId: UUID): List<Pet> {

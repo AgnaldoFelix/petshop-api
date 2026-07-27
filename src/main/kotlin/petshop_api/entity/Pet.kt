@@ -17,7 +17,7 @@ class Pet(
     val id: UUID = randomUUID(),
 
     @Column(nullable = false)
-    val tutor_id: UUID,
+    var tutor_id: UUID,
 
 
     @Column(nullable = false, length = 100)
@@ -37,19 +37,19 @@ class Pet(
 
     @Column(nullable = true, length = 100)
     @Size(max = 100)
-    val raca: String,
+    var raca: String,
 
 
     @Column(nullable = true, length = 20)
     @NotBlank
-    val data_nascimento: LocalDate?,
+    var data_nascimento: LocalDate?,
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name= "created_at", nullable = false, updatable = false)
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(name= "updated_at",nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
 
 )
