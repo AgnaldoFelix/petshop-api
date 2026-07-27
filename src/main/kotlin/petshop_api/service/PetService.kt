@@ -1,3 +1,4 @@
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import petshop_api.dto.PetRequest
 import petshop_api.dto.PetResponse
@@ -5,6 +6,7 @@ import petshop_api.entity.Tutor
 import petshop_api.mapper.PetMapper
 import petshop_api.repository.PetRepository
 import petshop_api.repository.TutorRepository
+import java.util.ArrayList
 import java.util.UUID
 
 @Service
@@ -35,6 +37,7 @@ class PetService(
         return PetMapper.toResponse(petSalvo, tutor.nome)
     }
 
+    @Transactional
     fun deletarPet(id: UUID) {
         if (!petRepository.existsById(id)) {
             throw Exception("Pet com ID $id não encontrado")
@@ -42,8 +45,17 @@ class PetService(
         petRepository.deleteById(id)
     }
 
-    fun listarPets(pet: Pet): List<Pet> {
-        return petRepository.findAll()
+    fun listarPets(): List<PetResponse> {
+        val pets = petRepository.findAll()
+        val resposta = ArrayList<PetResponse>()
+
+        for (pet in pets) {
+            val tutor = tutorRepository.findById(pet.tutor_id)
+                .orElseThrow { Exception("Tutor não encontrado") }
+            resposta.add(PetMapper.toResponse(pet, tutor.nome))
+        }
+
+        return resposta
     }
 
     fun atualizarPet(id: UUID, novosDados: PetRequest): PetResponse {
@@ -77,8 +89,58 @@ class PetService(
         return petRepository.findByTutorId(tutorId)
     }
 
-    fun buscarPetsPorNome(nome: String): List<Pet> {
-        return petRepository.findByName(nome)
+    fun buscarPetsPorNome(nome: String): List<PetResponse> {
+        val pets = petRepository.findByName(nome)
+
+        if (pets.isEmpty()) {
+            throw Exception("Nenhum pet encontrado com o nome: $nome")
+
+        }
+
+        val response = ArrayList<PetResponse>()
+
+        for (pet in pets) {
+            // Busca o tutor do pet
+            val tutor = tutorRepository.findById(pet.tutor_id)
+                .orElseThrow { Exception("Tutor não encontrado") }
+
+            // Converte pet + tutor para response
+            val petResponse = PetMapper.toResponse(pet, tutor.nome)
+
+            // Adiciona na lista
+            response.add(petResponse)
+        }
+
+        return response
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
