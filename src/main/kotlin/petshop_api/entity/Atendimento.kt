@@ -1,62 +1,61 @@
 package petshop_api.entity
 
+import StatusAtendimento
 import jakarta.persistence.Column
+import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Size
-import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.UpdateTimestamp
+import jakarta.persistence.Table
 import petshop_api.enums.NivelEmergencia
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import java.util.UUID.randomUUID
 
-class Atendimento (
+@Entity
+@Table(name = "atendimentos")
+data class Atendimento(
     @Id
-    val id: UUID = randomUUID(),
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: UUID = UUID.randomUUID(),
 
     @Column(name = "pet_id", nullable = false)
-    @NotBlank
     val petId: UUID,
 
-    @Column(name = "data_atendimento", nullable = false)
-    @NotBlank
-    val dataAtendimento: LocalDate,
+    @Column(name = "data_atendimento")
+    val dataAtendimento: LocalDate = LocalDate.now(),
 
-    @Column(name = "nivel_emergencia", nullable = false)
-    @NotBlank
     @Enumerated(EnumType.STRING)
-    val nivelEmergencia: NivelEmergencia,
+    @Column(name = "nivel_emergencia")
+    val nivelEmergencia: NivelEmergencia? = null,
 
-    @Column(nullable = true,  length = 150)
-    @Size(max = 150)
-    val observacao: String,
+    @Column(name = "observacao", length = 1000)
+    var observacao: String? = null,  // var para permitir alteração
 
-    @Column(nullable = false, length = 50)
-    @NotBlank
-    @Size(max = 50)
-    val decisao: String,
+    @Column(name = "decisao")
+    val decisao: String? = null,
 
-    @Column(nullable = false, length = 50)
-    @NotBlank
-    @Size(max = 50)
-    var finalizado: Boolean,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    var status: String = StatusAtendimento.AGUARDANDO.toString(),
 
-    @Column(nullable = false, length = 50)
-    @NotBlank
-    @Size(max = 50)
-    var dataFinalizacao: LocalDate = LocalDate.now(),
+    @Column(name = "finalizado")
+    var finalizado: Boolean = false,
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    var createdAt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "data_finalizacao")
+    var dataFinalizacao: LocalDate? = null,
 
-    @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(name = "data_cancelamento")
+    var dataCancelamento: LocalDate? = null,
+
+    @Column(name = "motivo_cancelamento", length = 500)
+    var motivoCancelamento: String? = null,
+
+    @Column(name = "created_at", nullable = false)
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(name = "updated_at", nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
-
-
 )
