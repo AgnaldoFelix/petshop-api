@@ -1,15 +1,19 @@
 package petshop_api.mapper
 
+import petshop_api.dto.TutorRequest
 import petshop_api.dto.TutorResponse
 import petshop_api.entity.Tutor
+import java.time.LocalDateTime
 
 object TutorMapper {
 
-    fun toEntity(request: Tutor): Tutor {
+    fun toEntity(request: TutorRequest): Tutor {
         return Tutor(
             nome = request.nome,
             telefone = request.telefone,
-            email = request.email
+            email = request.email,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
         )
     }
 
@@ -18,7 +22,8 @@ object TutorMapper {
             id = tutor.id,
             nome = tutor.nome,
             telefone = tutor.telefone,
-            email = tutor.email
+            email = tutor.email.toString(),
+            createdAt = tutor.createdAt
         )
     }
 }

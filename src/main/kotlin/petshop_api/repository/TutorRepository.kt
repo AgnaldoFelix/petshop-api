@@ -8,6 +8,6 @@ interface TutorRepository : JpaRepository<Tutor, UUID> {
 
     fun findByEmail(email: String): Tutor?
 
-    fun findByName(nome: String): Tutor
+    fun findByName(nome: String): List<Tutor>
 
 }

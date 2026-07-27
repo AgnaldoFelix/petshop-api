@@ -1,8 +1,13 @@
+package petshop_api.service
+
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import petshop_api.dto.TutorRequest
 import petshop_api.dto.TutorResponse
 import petshop_api.entity.Tutor
 import petshop_api.mapper.TutorMapper
 import petshop_api.repository.TutorRepository
+import java.util.ArrayList
 import java.util.UUID
 
 @Service
@@ -10,52 +15,57 @@ class TutorService(
     private val tutorRepository: TutorRepository
 ) {
 
-    fun cadastrarTutor(request: Tutor): TutorResponse {
-
+    @Transactional
+    fun cadastrarTutor(request: TutorRequest): TutorResponse {
         val tutor = TutorMapper.toEntity(request)
-
         val tutorSalvo = tutorRepository.save(tutor)
-
         return TutorMapper.toResponse(tutorSalvo)
     }
 
-    fun buscarTutorPorNome(nome: String): Tutor {
-        val tutorEncontrado = tutorRepository.findByName(nome)
+    fun buscarTutorPorId(id: UUID): TutorResponse {
+        val tutor = tutorRepository.findById(id)
+            .orElseThrow { Exception("Tutor com ID $id não encontrado") }
+        return TutorMapper.toResponse(tutor)
+    }
 
-        if (tutorEncontrado == null) {
-            throw Exception("Tutor não encontrado")
+    fun buscarTutorPorNome(nome: String): List<TutorResponse> {
+        val tutores = tutorRepository.findByName(nome)
+        val resposta = ArrayList<TutorResponse>()
+
+        for (tutor in tutores) {
+            resposta.add(TutorMapper.toResponse(tutor))
         }
-        return tutorEncontrado
+
+        return resposta
     }
 
-    fun buscarPorId(id: UUID): Tutor {
-        return tutorRepository.findById(id)
-            .orElseThrow { Exception("Tutor não encontrado") }
+    fun buscarTutorPorEmail(email: String): TutorResponse {
+        val tutor = tutorRepository.findByEmail(email)
+            ?: throw Exception("Tutor com email $email não encontrado")
+        return TutorMapper.toResponse(tutor)
     }
 
-    fun editarTutor(id: UUID, novosDados: Tutor): Tutor {
+    @Transactional
+    fun editarTutor(id: UUID, request: TutorRequest): TutorResponse {
         val tutorExistente = tutorRepository.findById(id)
-            .orElseThrow { Exception("Tutor não encontrado") }
+            .orElseThrow { Exception("Tutor com ID $id não encontrado") }
 
-        val tutorAtualizado = Tutor(
-            id = tutorExistente.id, // ⚠️ Mantém o mesmo ID!
-            nome = novosDados.nome,
-            telefone = novosDados.telefone,
-            email = novosDados.email,
-            createdAt = tutorExistente.createdAt // Preserva a data de criação original
-        )
+        tutorExistente.nome = request.nome
+        tutorExistente.telefone = request.telefone
+        tutorExistente.email = request.email
 
-        return tutorRepository.save(tutorAtualizado)
+        val tutorAtualizado = tutorRepository.save(tutorExistente)
+        return TutorMapper.toResponse(tutorAtualizado)
     }
 
-    fun listarTutores() {
-        tutorRepository.findAll()
+    fun listarTutores(): List<TutorResponse> {
+        val tutores = tutorRepository.findAll()
+        val resposta = ArrayList<TutorResponse>()
+
+        for (tutor in tutores) {
+            resposta.add(TutorMapper.toResponse(tutor))
+        }
+
+        return resposta
     }
-
-    fun buscarTutorEmail(tutor: Tutor) {
-        tutorRepository.findByEmail(tutor.email.toString())
-    }
-
-
-
 }
