@@ -1,8 +1,8 @@
 package petshop_api.mapper
 
-import Pet
 import petshop_api.dto.PetRequest
 import petshop_api.dto.PetResponse
+import petshop_api.entity.Pet
 import java.time.LocalDateTime
 
 object PetMapper {
@@ -11,9 +11,9 @@ object PetMapper {
         return Pet(
             tutor_id = request.tutorId,
             nome = request.nome,
-            idade = request.idade.toString(),
+            idade = request.idade,
             especie = request.especie,
-            raca = request.raca.toString(),
+            raca = request.raca,
             data_nascimento = request.dataNascimento,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()

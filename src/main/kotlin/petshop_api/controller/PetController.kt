@@ -1,12 +1,14 @@
 package petshop_api.controller
 
-import PetService
+import petshop_api.service.PetService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import petshop_api.dto.PetRequest
@@ -21,11 +23,11 @@ class PetController (
 ) {
     @PostMapping("/adicionar")
     fun adicionarPet(
-    @PathVariable request: PetRequest
+    @RequestBody request: PetRequest
     ): ResponseEntity<PetResponse> {
         val response = petService.adicionarPet(request)
 
-        return ResponseEntity.ok(response)
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
     @DeleteMapping("/{id}")
@@ -43,7 +45,7 @@ class PetController (
         return ResponseEntity.ok(response)
     }
 
-    @PutMapping("/editar")
+    @PutMapping("/editar/{id}")
     fun atualizarPet(
         @PathVariable id: UUID, request: PetRequest
     ): ResponseEntity<PetResponse> {

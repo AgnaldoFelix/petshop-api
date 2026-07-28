@@ -1,30 +1,56 @@
 package petshop_api.service
 
 import org.springframework.stereotype.Service
-import petshop_api.entity.AtendimentoServico
+import org.springframework.transaction.annotation.Transactional
+import petshop_api.dto.AtendimentoServicoRequest
+import petshop_api.dto.AtendimentoServicoResponse
+import petshop_api.mapper.AtendimentoServicoMapper
 import petshop_api.repository.AtendimentoServicoRepository
+import petshop_api.repository.ServicoRepository
+import java.util.ArrayList
 import java.util.UUID
 
 @Service
 class AtendimentoServicoService(
-    private val atendimentoServicoRepository: AtendimentoServicoRepository
+    private val atendimentoServicoRepository: AtendimentoServicoRepository,
+    private val servicoRepository: ServicoRepository  // ← Novo
 ) {
 
+    @Transactional
+    fun vincularServico(request: AtendimentoServicoRequest): AtendimentoServicoResponse {
+        val servico = servicoRepository.findById(request.servicoId)
+            .orElseThrow { Exception("Serviço não encontrado") }
 
-    fun vincularServico(atendimentoId: UUID, servicoId: UUID): AtendimentoServico {
-        val vínculo = AtendimentoServico(
-            atendimentoId = atendimentoId,
-            servicoId = servicoId
+        val atendimentoServico = AtendimentoServicoMapper.toEntity(request)
+
+        val atendimentoServicoSalvo = atendimentoServicoRepository.save(atendimentoServico)
+
+        return AtendimentoServicoMapper.toResponse(
+            atendimentoServicoSalvo,
+            servico.nome,
+            servico.valor
         )
-        return atendimentoServicoRepository.save(vínculo)
     }
 
+    fun listarPorAtendimento(atendimentoId: UUID): List<AtendimentoServicoResponse> {
+        val lista = atendimentoServicoRepository.findByAtendimentoId(atendimentoId)
+        val resposta = ArrayList<AtendimentoServicoResponse>()
 
-    fun listarPorAtendimento(atendimentoId: UUID): List<AtendimentoServico> {
-        return atendimentoServicoRepository.findByAtendimentoId(atendimentoId)
+        for (item in lista) {
+            val servico = servicoRepository.findById(item.servicoId)
+                .orElseThrow { Exception("Serviço não encontrado") }
+
+            resposta.add(AtendimentoServicoMapper.toResponse(item, servico.nome, servico.valor))
+        }
+
+        return resposta
     }
 
+    @Transactional
     fun removerServicoAtendimento(id: UUID) {
+        if (!atendimentoServicoRepository.existsById(id)) {
+            throw Exception("Vínculo não encontrado")
+        }
         atendimentoServicoRepository.deleteById(id)
     }
 }

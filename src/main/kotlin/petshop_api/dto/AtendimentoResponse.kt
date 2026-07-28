@@ -15,5 +15,6 @@ data class AtendimentoResponse (
     val status: String,
     val finalizado: Boolean,
     val dataFinalizacao: LocalDate?,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    var updatedAt: LocalDateTime
 )

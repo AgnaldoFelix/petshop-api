@@ -1,3 +1,5 @@
+package petshop_api.entity
+
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -19,7 +21,6 @@ class Pet(
     @Column(nullable = false)
     var tutor_id: UUID,
 
-
     @Column(nullable = false, length = 100)
     @NotBlank
     @Size(max = 100)
@@ -27,29 +28,25 @@ class Pet(
 
     @Column(nullable = true, length = 2)
     @Size(max = 2)
-    var idade: String,
+    var idade: String? = null,
 
     @Column(nullable = false, length = 100)
     @NotBlank
     @Size(max = 100)
     var especie: String,
 
-
     @Column(nullable = true, length = 100)
     @Size(max = 100)
-    var raca: String,
-
+    var raca: String? = null,
 
     @Column(nullable = true, length = 20)
-    @NotBlank
-    var data_nascimento: LocalDate?,
+    var data_nascimento: LocalDate? = null,
 
     @CreationTimestamp
-    @Column(name= "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    @Column(name= "updated_at",nullable = false)
+    @Column(name = "updated_at", nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
-
 )

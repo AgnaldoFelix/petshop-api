@@ -17,7 +17,7 @@ object AtendimentoMapper {
             nivelEmergencia = request.nivelEmergencia,
             observacao = request.observacao,
             decisao = "",
-            status = StatusAtendimento.AGUARDANDO.toString(),
+            status = StatusAtendimento.AGUARDANDO,
             finalizado = false,
             dataFinalizacao = null,
             dataCancelamento = null,
@@ -39,7 +39,8 @@ object AtendimentoMapper {
             status = atendimento.status.toString(),
             finalizado = atendimento.finalizado,
             dataFinalizacao = atendimento.dataFinalizacao,
-            createdAt = atendimento.createdAt
+            createdAt = atendimento.createdAt,
+            updatedAt = atendimento.updatedAt
         )
     }
 
@@ -62,7 +63,7 @@ object AtendimentoMapper {
         }
 
         val inicio = atendimento.dataAtendimento.atStartOfDay()
-        val fim = atendimento.dataFinalizacao?.atStartOfDay()
+        val fim = atendimento.dataFinalizacao!!.atStartOfDay()
 
         val dias = ChronoUnit.DAYS.between(inicio, fim)
 

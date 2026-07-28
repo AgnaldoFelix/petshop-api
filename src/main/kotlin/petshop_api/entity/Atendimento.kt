@@ -37,9 +37,9 @@ data class Atendimento(
     @Column(name = "decisao")
     val decisao: String? = null,
 
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    var status: String = StatusAtendimento.AGUARDANDO.toString(),
+    var status: StatusAtendimento = StatusAtendimento.AGUARDANDO,
 
     @Column(name = "finalizado")
     var finalizado: Boolean = false,
