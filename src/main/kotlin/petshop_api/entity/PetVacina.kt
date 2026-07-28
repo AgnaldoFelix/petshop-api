@@ -3,14 +3,20 @@ package petshop_api.entity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.UUID
 import java.util.UUID.randomUUID
 
 @Entity
-class PetVacina (
+@Table(name = "pet_vacina")
+class PetVacina(
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     val id: UUID = randomUUID(),
 
     @Column(name = "vacina_id", nullable = false)
@@ -21,7 +27,15 @@ class PetVacina (
     @NotBlank
     val petId: UUID,
 
-    @Column(nullable = false)
+    @Column(name = "data_aplicacao", nullable = false)
     @NotBlank
-    val dataAplicacao: LocalDate
+    val dataAplicacao: LocalDate,
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 )

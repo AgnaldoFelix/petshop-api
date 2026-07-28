@@ -3,6 +3,7 @@ package petshop_api.entity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.hibernate.annotations.CreationTimestamp
@@ -12,31 +13,30 @@ import java.util.UUID
 import java.util.UUID.randomUUID
 
 @Entity
-class Servico (
+@Table(name = "servico")
+class Servico(
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     val id: UUID = randomUUID(),
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "nome", nullable = false, length = 100)
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 100)
     var nome: String,
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "descricao", nullable = false, columnDefinition = "TEXT")
     @NotBlank
-    @Size(max = 100)
     var descricao: String,
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "valor", nullable = false)
     @NotBlank
-    @Size(max = 100)
     var valor: Double,
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
-
 )

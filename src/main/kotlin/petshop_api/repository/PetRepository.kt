@@ -10,6 +10,5 @@ interface PetRepository : JpaRepository<Pet, UUID> {
 
     fun findByTutorId(tutorId: UUID): List<Pet>
 
-    fun findByNomeAndTutor_id(nome: String, tutorId: UUID): List<Pet>
-
+    fun findByNomeAndTutorId(nome: String, tutorId: UUID): List<Pet>
 }

@@ -19,7 +19,7 @@ class PetService(
 
     @Transactional
     fun adicionarPet(request: PetRequest): PetResponse {
-        val petExistente = petRepository.findByNomeAndTutor_id(request.nome, request.tutorId)
+        val petExistente = petRepository.findByNomeAndTutorId(request.nome, request.tutorId)
 
         if (!petExistente.isEmpty()) {
             throw Exception("Pet já cadastrado para este tutor")
@@ -39,7 +39,7 @@ class PetService(
         val resposta = ArrayList<PetResponse>()
 
         for (pet in pets) {
-            val tutor = tutorRepository.findById(pet.tutor_id)
+            val tutor = tutorRepository.findById(pet.tutorId)
                 .orElseThrow { Exception("Tutor não encontrado") }
             resposta.add(PetMapper.toResponse(pet, tutor.nome))
         }
@@ -51,7 +51,7 @@ class PetService(
         val pet = petRepository.findById(id)
             .orElseThrow { Exception("Pet com ID $id não encontrado") }
 
-        val tutor = tutorRepository.findById(pet.tutor_id)
+        val tutor = tutorRepository.findById(pet.tutorId)
             .orElseThrow { Exception("Tutor não encontrado") }
 
         return PetMapper.toResponse(pet, tutor.nome)
@@ -80,7 +80,7 @@ class PetService(
         }
 
         for (pet in pets) {
-            val tutor = tutorRepository.findById(pet.tutor_id)
+            val tutor = tutorRepository.findById(pet.tutorId)
                 .orElseThrow { Exception("Tutor não encontrado") }
             resposta.add(PetMapper.toResponse(pet, tutor.nome))
         }
@@ -97,11 +97,11 @@ class PetService(
         petExistente.idade = request.idade
         petExistente.especie = request.especie
         petExistente.raca = request.raca
-        petExistente.data_nascimento = request.dataNascimento
+        petExistente.dataNascimento = request.dataNascimento
 
         val petAtualizado = petRepository.save(petExistente)
 
-        val tutor = tutorRepository.findById(petAtualizado.tutor_id)
+        val tutor = tutorRepository.findById(petAtualizado.tutorId)
             .orElseThrow { Exception("Tutor não encontrado") }
 
         return PetMapper.toResponse(petAtualizado, tutor.nome)

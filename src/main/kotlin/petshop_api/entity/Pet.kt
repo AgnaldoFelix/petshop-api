@@ -3,6 +3,7 @@ package petshop_api.entity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.hibernate.annotations.CreationTimestamp
@@ -13,34 +14,36 @@ import java.util.UUID
 import java.util.UUID.randomUUID
 
 @Entity
+@Table(name = "pet")
 class Pet(
 
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     val id: UUID = randomUUID(),
 
-    @Column(nullable = false)
-    var tutor_id: UUID,
+    @Column(name = "tutor_id", nullable = false)
+    var tutorId: UUID,
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "nome", nullable = false, length = 20)
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 20)
     var nome: String,
 
-    @Column(nullable = true, length = 2)
+    @Column(name = "idade", length = 2)
     @Size(max = 2)
     var idade: String? = null,
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "especie", nullable = false, length = 50)
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 50)
     var especie: String,
 
-    @Column(nullable = true, length = 100)
+    @Column(name = "raca", length = 100)
     @Size(max = 100)
     var raca: String? = null,
 
-    @Column(nullable = true, length = 20)
-    var data_nascimento: LocalDate? = null,
+    @Column(name = "data_nascimento")
+    var dataNascimento: LocalDate? = null,
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

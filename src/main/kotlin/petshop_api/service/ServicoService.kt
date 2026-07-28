@@ -15,7 +15,7 @@ class ServicoService (
 ) {
 
     fun adicionarServico(request: ServicoRequest): ServicoResponse {
-        val servicoExistente = servicoRepository.findByName(request.nome)
+        val servicoExistente = servicoRepository.findByNome(request.nome)
 
         if (servicoExistente != null) {
             throw Exception("Já existe um serviço com o nome: ${request.nome}")
@@ -43,7 +43,7 @@ class ServicoService (
 
 
     fun buscarPorNome(nome: String): List<ServicoResponse> {
-        val servicos = servicoRepository.findByName(nome)
+        val servicos = servicoRepository.findByNome(nome)
 
         if (servicos.isEmpty()) {
             throw Exception("Serviço não encontrado: ${nome}")

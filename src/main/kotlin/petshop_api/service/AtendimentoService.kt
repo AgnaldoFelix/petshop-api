@@ -1,12 +1,12 @@
 package petshop_api.service
 
-import StatusAtendimento
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import petshop_api.dto.AtendimentoRequest
 import petshop_api.dto.AtendimentoResponse
 import petshop_api.entity.Atendimento
 import petshop_api.enums.NivelEmergencia
+import petshop_api.enums.StatusAtendimento
 import petshop_api.mapper.AtendimentoMapper
 import petshop_api.repository.AtendimentoRepository
 import petshop_api.repository.PetRepository

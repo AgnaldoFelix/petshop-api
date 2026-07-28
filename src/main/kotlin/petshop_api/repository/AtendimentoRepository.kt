@@ -1,11 +1,11 @@
 package petshop_api.repository
 
-import StatusAtendimento
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import petshop_api.entity.Atendimento
 import petshop_api.enums.NivelEmergencia
+import petshop_api.enums.StatusAtendimento
 import java.time.LocalDate
 import java.util.UUID
 

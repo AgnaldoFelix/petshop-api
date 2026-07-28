@@ -4,6 +4,7 @@ import petshop_api.dto.AtendimentoHistoricoResponse
 import petshop_api.dto.AtendimentoRequest
 import petshop_api.dto.AtendimentoResponse
 import petshop_api.entity.Atendimento
+import petshop_api.enums.StatusAtendimento
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit

@@ -9,12 +9,12 @@ object PetMapper {
 
     fun toEntity(request: PetRequest): Pet {
         return Pet(
-            tutor_id = request.tutorId,
+            tutorId = request.tutorId,
             nome = request.nome,
             idade = request.idade,
             especie = request.especie,
             raca = request.raca,
-            data_nascimento = request.dataNascimento,
+            dataNascimento = request.dataNascimento,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )
@@ -23,13 +23,13 @@ object PetMapper {
     fun toResponse(pet: Pet, tutorNome: String): PetResponse {
         return PetResponse(
             id = pet.id,
-            tutorId = pet.tutor_id,
+            tutorId = pet.tutorId,
             tutorNome = tutorNome,
             nome = pet.nome,
             idade = pet.idade,
             especie = pet.especie,
             raca = pet.raca,
-            dataNascimento = pet.data_nascimento,
+            dataNascimento = pet.dataNascimento,
             createdAt = pet.createdAt,
             updatedAt = pet.updatedAt
         )

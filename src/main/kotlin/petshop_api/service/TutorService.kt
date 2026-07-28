@@ -29,7 +29,7 @@ class TutorService(
     }
 
     fun buscarTutorPorNome(nome: String): List<TutorResponse> {
-        val tutores = tutorRepository.findByName(nome)
+        val tutores = tutorRepository.findByNome(nome)
         val resposta = ArrayList<TutorResponse>()
 
         for (tutor in tutores) {
