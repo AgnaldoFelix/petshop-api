@@ -1,0 +1,511 @@
+﻿{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-07-28T15:50:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2026.7.0",
+  "resources": [
+    {
+      "_type": "workspace",
+      "_id": "wrk_petshop_api",
+      "name": "Petshop API",
+      "description": "Collection para a API do Petshop",
+      "scope": "collection",
+      "metaSortKey": -1
+    },
+    {
+      "_type": "environment",
+      "_id": "env_base",
+      "parentId": "wrk_petshop_api",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8081"
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": -1
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_tutores",
+      "parentId": "wrk_petshop_api",
+      "name": "Tutores",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 1
+    },
+    {
+      "_type": "request",
+      "_id": "req_tutores_create",
+      "parentId": "fld_tutores",
+      "name": "POST /api/tutores",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/tutores",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"João da Silva\",\n  \"telefone\": \"11999999999\",\n  \"email\": \"joao@email.com\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_tutores_list",
+      "parentId": "fld_tutores",
+      "name": "GET /api/tutores",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/tutores",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_tutores_search",
+      "parentId": "fld_tutores",
+      "name": "GET /api/tutores/buscar",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/tutores/buscar",
+      "parameters": [
+        { "name": "nome", "value": "João" }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_tutores_detail",
+      "parentId": "fld_tutores",
+      "name": "GET /api/tutores/{id}",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/tutores/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_tutores_update",
+      "parentId": "fld_tutores",
+      "name": "PUT /api/tutores/{id}",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/tutores/00000000-0000-0000-0000-000000000000",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"João Atualizado\",\n  \"telefone\": \"11888888888\",\n  \"email\": \"joao.atualizado@email.com\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_tutores_pets",
+      "parentId": "fld_tutores",
+      "name": "GET /api/tutores/{id}/pets",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/tutores/00000000-0000-0000-0000-000000000000/pets",
+      "parameters": []
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_pets",
+      "parentId": "wrk_petshop_api",
+      "name": "Pets",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 2
+    },
+    {
+      "_type": "request",
+      "_id": "req_pets_create",
+      "parentId": "fld_pets",
+      "name": "POST /api/pets",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/pets",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"tutorId\": \"00000000-0000-0000-0000-000000000000\",\n  \"nome\": \"Rex\",\n  \"idade\": \"3\",\n  \"especie\": \"Cachorro\",\n  \"raca\": \"Labrador\",\n  \"dataNascimento\": \"2020-01-10\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pets_list",
+      "parentId": "fld_pets",
+      "name": "GET /api/pets",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pets",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pets_search",
+      "parentId": "fld_pets",
+      "name": "GET /api/pets/buscar",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pets/buscar",
+      "parameters": [
+        { "name": "nome", "value": "Rex" }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_pets_detail",
+      "parentId": "fld_pets",
+      "name": "GET /api/pets/{id}",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pets/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pets_update",
+      "parentId": "fld_pets",
+      "name": "PUT /api/pets/{id}",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/pets/00000000-0000-0000-0000-000000000000",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"tutorId\": \"00000000-0000-0000-0000-000000000000\",\n  \"nome\": \"Rex Atualizado\",\n  \"idade\": \"4\",\n  \"especie\": \"Cachorro\",\n  \"raca\": \"Labrador\",\n  \"dataNascimento\": \"2020-01-10\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pets_delete",
+      "parentId": "fld_pets",
+      "name": "DELETE /api/pets/{id}",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ base_url }}/api/pets/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_atendimentos",
+      "parentId": "wrk_petshop_api",
+      "name": "Atendimentos",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 3
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_create",
+      "parentId": "fld_atendimentos",
+      "name": "POST /api/atendimentos",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/atendimentos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"petId\": \"00000000-0000-0000-0000-000000000000\",\n  \"dataAtendimento\": \"2026-07-28\",\n  \"nivelEmergencia\": \"BAIXO\",\n  \"observacao\": \"Atendimento inicial\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_list",
+      "parentId": "fld_atendimentos",
+      "name": "GET /api/atendimentos",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/atendimentos",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_detail",
+      "parentId": "fld_atendimentos",
+      "name": "GET /api/atendimentos/{id}",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/atendimentos/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_start",
+      "parentId": "fld_atendimentos",
+      "name": "POST /api/atendimentos/{id}/iniciar",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/atendimentos/00000000-0000-0000-0000-000000000000/iniciar",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_cancel",
+      "parentId": "fld_atendimentos",
+      "name": "PATCH /api/atendimentos/{id}/cancelar",
+      "description": "",
+      "method": "PATCH",
+      "url": "{{ base_url }}/api/atendimentos/00000000-0000-0000-0000-000000000000/cancelar",
+      "parameters": [
+        { "name": "motivo", "value": "Cliente desistiu" }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_finish",
+      "parentId": "fld_atendimentos",
+      "name": "PATCH /api/atendimentos/{id}/finalizar",
+      "description": "",
+      "method": "PATCH",
+      "url": "{{ base_url }}/api/atendimentos/00000000-0000-0000-0000-000000000000/finalizar",
+      "parameters": [
+        { "name": "observacaoFinal", "value": "Atendimento concluído" }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimentos_emergency",
+      "parentId": "fld_atendimentos",
+      "name": "POST /api/atendimentos/emergencia",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/atendimentos/emergencia",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"petId\": \"00000000-0000-0000-0000-000000000000\",\n  \"descricao\": \"Pet apresentou sinais de emergência\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_servicos",
+      "parentId": "wrk_petshop_api",
+      "name": "Serviços",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 4
+    },
+    {
+      "_type": "request",
+      "_id": "req_servicos_create",
+      "parentId": "fld_servicos",
+      "name": "POST /api/servicos",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/servicos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Banho\",\n  \"descricao\": \"Banho completo\",\n  \"valor\": 50.00\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_servicos_list",
+      "parentId": "fld_servicos",
+      "name": "GET /api/servicos",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/servicos",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_servicos_search",
+      "parentId": "fld_servicos",
+      "name": "GET /api/servicos/buscar",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/servicos/buscar",
+      "parameters": [
+        { "name": "nome", "value": "Banho" }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_servicos_update",
+      "parentId": "fld_servicos",
+      "name": "PUT /api/servicos/{id}",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/servicos/00000000-0000-0000-0000-000000000000",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Banho Premium\",\n  \"descricao\": \"Banho completo premium\",\n  \"valor\": 70.00\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_servicos_delete",
+      "parentId": "fld_servicos",
+      "name": "DELETE /api/servicos/{id}",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ base_url }}/api/servicos/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_vacinas",
+      "parentId": "wrk_petshop_api",
+      "name": "Vacinas",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 5
+    },
+    {
+      "_type": "request",
+      "_id": "req_vacinas_create",
+      "parentId": "fld_vacinas",
+      "name": "POST /api/vacinas",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/vacinas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Antirrábica\",\n  \"descricao\": \"Vacina antirrábica anual\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_vacinas_list",
+      "parentId": "fld_vacinas",
+      "name": "GET /api/vacinas",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/vacinas",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_vacinas_search",
+      "parentId": "fld_vacinas",
+      "name": "GET /api/vacinas/buscar",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/vacinas/buscar",
+      "parameters": [
+        { "name": "nome", "value": "Antirrábica" }
+      ]
+    },
+    {
+      "_type": "request",
+      "_id": "req_vacinas_update",
+      "parentId": "fld_vacinas",
+      "name": "PUT /api/vacinas/{id}",
+      "description": "",
+      "method": "PUT",
+      "url": "{{ base_url }}/api/vacinas/00000000-0000-0000-0000-000000000000",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Antirrábica Atualizada\",\n  \"descricao\": \"Vacina antirrábica anual atualizada\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_vacinas_delete",
+      "parentId": "fld_vacinas",
+      "name": "DELETE /api/vacinas/{id}",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ base_url }}/api/vacinas/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_pet_vacinas",
+      "parentId": "wrk_petshop_api",
+      "name": "Pet-Vacinas",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 6
+    },
+    {
+      "_type": "request",
+      "_id": "req_pet_vacinas_create",
+      "parentId": "fld_pet_vacinas",
+      "name": "POST /api/pet-vacinas/aplicar",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/pet-vacinas/aplicar",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"petId\": \"00000000-0000-0000-0000-000000000000\",\n  \"vacinaId\": \"00000000-0000-0000-0000-000000000000\",\n  \"dataAplicacao\": \"2026-07-28\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pet_vacinas_list",
+      "parentId": "fld_pet_vacinas",
+      "name": "GET /api/pet-vacinas",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pet-vacinas",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pet_vacinas_by_pet",
+      "parentId": "fld_pet_vacinas",
+      "name": "GET /api/pet-vacinas/pet/{petId}",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pet-vacinas/pet/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_pet_vacinas_by_vacina",
+      "parentId": "fld_pet_vacinas",
+      "name": "GET /api/pet-vacinas/vacina/{vacinaId}",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/pet-vacinas/vacina/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request_group",
+      "_id": "fld_atendimento_servicos",
+      "parentId": "wrk_petshop_api",
+      "name": "Atendimento-Serviços",
+      "description": "",
+      "environment": {},
+      "metaSortKey": 7
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimento_servicos_create",
+      "parentId": "fld_atendimento_servicos",
+      "name": "POST /api/atendimento-servicos/vincular",
+      "description": "",
+      "method": "POST",
+      "url": "{{ base_url }}/api/atendimento-servicos/vincular",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"atendimentoId\": \"00000000-0000-0000-0000-000000000000\",\n  \"servicoId\": \"00000000-0000-0000-0000-000000000000\"\n}"
+      },
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimento_servicos_by_atendimento",
+      "parentId": "fld_atendimento_servicos",
+      "name": "GET /api/atendimento-servicos/atendimento/{atendimentoId}",
+      "description": "",
+      "method": "GET",
+      "url": "{{ base_url }}/api/atendimento-servicos/atendimento/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    },
+    {
+      "_type": "request",
+      "_id": "req_atendimento_servicos_delete",
+      "parentId": "fld_atendimento_servicos",
+      "name": "DELETE /api/atendimento-servicos/{id}",
+      "description": "",
+      "method": "DELETE",
+      "url": "{{ base_url }}/api/atendimento-servicos/00000000-0000-0000-0000-000000000000",
+      "parameters": []
+    }
+  ]
+}
