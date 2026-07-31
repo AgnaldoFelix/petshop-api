@@ -3,11 +3,9 @@ package petshop_api.dto
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import java.util.UUID
-import jakarta.persistence.Id
 
 data class VacinaRequest(
 
-    @Id
     val id: UUID,
 
     @field:NotBlank(message = "Nome é obrigatório")

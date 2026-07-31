@@ -1,5 +1,6 @@
 package petshop_api.controller
 
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,50 +22,46 @@ import java.util.UUID
 class ServicoController(
     private val servicoService: ServicoService
 ) {
-    @PostMapping("/adicionar")
+
+    @PostMapping
     fun adicionarServico(
-        @RequestBody request: ServicoRequest
+        @Valid @RequestBody request: ServicoRequest
     ): ResponseEntity<ServicoResponse> {
         val response = servicoService.adicionarServico(request)
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
-    @PutMapping("/editar/{id}")
-    fun editarServico(
-        @PathVariable id: UUID, request: ServicoRequest
-    ): ResponseEntity<ServicoResponse>{
-        val response = servicoService.editarServico(id, request)
-
-        return ResponseEntity.ok(response   )
-    }
-
-    @GetMapping("/buscar/")
-    fun buscarPorNome(
-        @RequestParam nome: String
-    ): ResponseEntity<List<ServicoResponse>> {
-        val response = servicoService.buscarPorNome(nome)
-
+    @GetMapping
+    fun listarServicos(): ResponseEntity<List<ServicoResponse>> {
+        val response = servicoService.listarServicos()
         return ResponseEntity.ok(response)
-    }
-
-    @DeleteMapping("/delete/{id}")
-    fun deletarServico(
-        @PathVariable id: UUID
-    ): ResponseEntity<Void>{
-        servicoService.deletarServico(id)
-        return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/buscar")
-    fun listarServicos (
-    ): ResponseEntity<List<ServicoResponse>>{
-        val response = servicoService.listarServicos()
-
+    fun buscarPorNome(
+        @RequestParam(name = "nome") nome: String
+    ): ResponseEntity<List<ServicoResponse>> {
+        val response = servicoService.buscarPorNome(nome)
         return ResponseEntity.ok(response)
     }
-}
 
+    @PutMapping("/{id}")
+    fun editarServico(
+        @PathVariable id: UUID,
+        @Valid @RequestBody request: ServicoRequest
+    ): ResponseEntity<ServicoResponse> {
+        val response = servicoService.editarServico(id, request)
+        return ResponseEntity.ok(response)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletarServico(
+        @PathVariable id: UUID
+    ): ResponseEntity<Void> {
+        servicoService.deletarServico(id)
+        return ResponseEntity.noContent().build()
+    }
+}
 
 
 

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDate
@@ -20,15 +21,15 @@ class PetVacina(
     val id: UUID = randomUUID(),
 
     @Column(name = "vacina_id", nullable = false)
-    @NotBlank
+    @NotNull
     val vacinaId: UUID,
 
     @Column(name = "pet_id", nullable = false)
-    @NotBlank
+    @NotNull
     val petId: UUID,
 
     @Column(name = "data_aplicacao", nullable = false)
-    @NotBlank
+    @NotNull
     val dataAplicacao: LocalDate,
 
     @CreationTimestamp

@@ -17,7 +17,7 @@ class ServicoService (
     fun adicionarServico(request: ServicoRequest): ServicoResponse {
         val servicoExistente = servicoRepository.findByNome(request.nome)
 
-        if (servicoExistente != null) {
+        if (servicoExistente.isNotEmpty()) {
             throw Exception("Já existe um serviço com o nome: ${request.nome}")
         }
 

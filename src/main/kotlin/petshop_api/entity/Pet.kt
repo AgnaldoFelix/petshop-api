@@ -24,9 +24,9 @@ class Pet(
     @Column(name = "tutor_id", nullable = false)
     var tutorId: UUID,
 
-    @Column(name = "nome", nullable = false, length = 20)
+    @Column(name = "nome", nullable = false, length = 100)
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 100)
     var nome: String,
 
     @Column(name = "idade", length = 2)
