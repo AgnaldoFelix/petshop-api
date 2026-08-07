@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional
 import petshop_api.dto.TutorRequest
 import petshop_api.dto.TutorResponse
 import petshop_api.entity.Tutor
+import petshop_api.exception.TutorNotFoundByEmailException
+import petshop_api.exception.TutorNotFoundException
 import petshop_api.mapper.TutorMapper
 import petshop_api.repository.TutorRepository
 import java.util.ArrayList
@@ -24,7 +26,7 @@ class TutorService(
 
     fun buscarTutorPorId(id: UUID): TutorResponse {
         val tutor = tutorRepository.findById(id)
-            .orElseThrow { Exception("Tutor com ID $id não encontrado") }
+            .orElseThrow { TutorNotFoundException(id) }
         return TutorMapper.toResponse(tutor)
     }
 
@@ -41,14 +43,14 @@ class TutorService(
 
     fun buscarTutorPorEmail(email: String): TutorResponse {
         val tutor = tutorRepository.findByEmail(email)
-            ?: throw Exception("Tutor com email $email não encontrado")
+            ?: throw TutorNotFoundByEmailException(email)
         return TutorMapper.toResponse(tutor)
     }
 
     @Transactional
     fun editarTutor(id: UUID, request: TutorRequest): TutorResponse {
         val tutorExistente = tutorRepository.findById(id)
-            .orElseThrow { Exception("Tutor com ID $id não encontrado") }
+            .orElseThrow { TutorNotFoundException(id) }
 
         tutorExistente.nome = request.nome
         tutorExistente.telefone = request.telefone

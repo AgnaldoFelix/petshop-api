@@ -7,6 +7,10 @@ import petshop_api.dto.AtendimentoResponse
 import petshop_api.entity.Atendimento
 import petshop_api.enums.NivelEmergencia
 import petshop_api.enums.StatusAtendimento
+import petshop_api.exception.AtendimentoNotFoundException
+import petshop_api.exception.AtendimentoInvalidStateException
+import petshop_api.exception.InvalidDateRangeException
+import petshop_api.exception.PetNotFoundException
 import petshop_api.mapper.AtendimentoMapper
 import petshop_api.repository.AtendimentoRepository
 import petshop_api.repository.PetRepository
@@ -24,7 +28,7 @@ class AtendimentoService(
     @Transactional
     fun realizarAtendimento(request: AtendimentoRequest): AtendimentoResponse {
         val petExistente = petRepository.findById(request.petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(request.petId) }
 
         val decisaoTomada = when (request.nivelEmergencia) {
             NivelEmergencia.BAIXO -> "Banho e tosa"
@@ -54,7 +58,7 @@ class AtendimentoService(
 
         for (atendimento in atendimentos) {
             val pet = petRepository.findById(atendimento.petId)
-                .orElseThrow { Exception("Pet não encontrado") }
+                .orElseThrow { PetNotFoundException(atendimento.petId) }
             resposta.add(AtendimentoMapper.toResponse(atendimento, pet.nome))
         }
 
@@ -72,14 +76,14 @@ class AtendimentoService(
     @Transactional
     fun finalizarAtendimento(atendimentoId: UUID, observacaoFinal: String? = null): AtendimentoResponse {
         val atendimento = atendimentoRepository.findById(atendimentoId)
-            .orElseThrow { Exception("Atendimento não encontrado") }
+            .orElseThrow { AtendimentoNotFoundException(atendimentoId) }
 
         if (atendimento.finalizado) {
-            throw Exception("Atendimento já está finalizado")
+            throw AtendimentoInvalidStateException("Atendimento já está finalizado")
         }
 
         if (atendimento.status == StatusAtendimento.CANCELADO) {
-            throw Exception("Atendimento cancelado não pode ser finalizado")
+            throw AtendimentoInvalidStateException("Atendimento cancelado não pode ser finalizado")
         }
 
         atendimento.finalizado = true
@@ -95,7 +99,7 @@ class AtendimentoService(
         val atendimentoFinalizado = atendimentoRepository.save(atendimento)
 
         val pet = petRepository.findById(atendimentoFinalizado.petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(atendimentoFinalizado.petId) }
 
         return AtendimentoMapper.toResponse(atendimentoFinalizado, pet.nome)
     }
@@ -103,14 +107,14 @@ class AtendimentoService(
     @Transactional
     fun iniciarAtendimento(atendimentoId: UUID): AtendimentoResponse {
         val atendimento = atendimentoRepository.findById(atendimentoId)
-            .orElseThrow { Exception("Atendimento não encontrado") }
+            .orElseThrow { AtendimentoNotFoundException(atendimentoId) }
 
         if (atendimento.status != StatusAtendimento.AGUARDANDO) {
-            throw Exception("Atendimento não pode ser iniciado. Status atual: ${atendimento.status}")
+            throw AtendimentoInvalidStateException("Atendimento não pode ser iniciado. Status atual: ${atendimento.status}")
         }
 
         if (atendimento.finalizado) {
-            throw Exception("Atendimento já foi finalizado")
+            throw AtendimentoInvalidStateException("Atendimento já foi finalizado")
         }
 
         atendimento.status = StatusAtendimento.EM_ANDAMENTO
@@ -119,7 +123,7 @@ class AtendimentoService(
         val atendimentoSalvo = atendimentoRepository.save(atendimento)
 
         val pet = petRepository.findById(atendimentoSalvo.petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(atendimentoSalvo.petId) }
 
         return AtendimentoMapper.toResponse(atendimentoSalvo, pet.nome)
     }
@@ -127,14 +131,14 @@ class AtendimentoService(
     @Transactional
     fun cancelarAtendimento(atendimentoId: UUID, motivo: String): AtendimentoResponse {
         val atendimento = atendimentoRepository.findById(atendimentoId)
-            .orElseThrow { Exception("Atendimento não encontrado") }
+            .orElseThrow { AtendimentoNotFoundException(atendimentoId) }
 
         if (atendimento.finalizado) {
-            throw Exception("Atendimento finalizado não pode ser cancelado")
+            throw AtendimentoInvalidStateException("Atendimento finalizado não pode ser cancelado")
         }
 
         if (atendimento.status == StatusAtendimento.CANCELADO) {
-            throw Exception("Atendimento já está cancelado")
+            throw AtendimentoInvalidStateException("Atendimento já está cancelado")
         }
 
         atendimento.status = StatusAtendimento.CANCELADO
@@ -146,7 +150,7 @@ class AtendimentoService(
         val atendimentoCancelado = atendimentoRepository.save(atendimento)
 
         val pet = petRepository.findById(atendimentoCancelado.petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(atendimentoCancelado.petId) }
 
         return AtendimentoMapper.toResponse(atendimentoCancelado, pet.nome)
     }
@@ -154,7 +158,7 @@ class AtendimentoService(
     @Transactional
     fun registrarEmergencia(petId: UUID, descricao: String): AtendimentoResponse {
         val pet = petRepository.findById(petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(petId) }
 
         val atendimentoEmergencia = Atendimento(
             petId = pet.id,
@@ -174,15 +178,15 @@ class AtendimentoService(
 
     fun buscarAtendimentoPorId(id: UUID): AtendimentoResponse {
         val atendimento = atendimentoRepository.findById(id)
-            .orElseThrow { Exception("Atendimento não encontrado") }
+            .orElseThrow { AtendimentoNotFoundException(id) }
         val pet = petRepository.findById(atendimento.petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(atendimento.petId) }
         return AtendimentoMapper.toResponse(atendimento, pet.nome)
     }
 
     fun buscarHistoricoPorPet(petId: UUID): List<AtendimentoResponse> {
         val pet = petRepository.findById(petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(petId) }
 
         val atendimentos = atendimentoRepository.findByPetIdOrderByCreatedAtDesc(petId)
         val resposta = ArrayList<AtendimentoResponse>()
@@ -199,7 +203,7 @@ class AtendimentoService(
         dataFim: LocalDate
     ): List<AtendimentoResponse> {
         if (dataInicio.isAfter(dataFim)) {
-            throw Exception("Data de início não pode ser maior que data de fim")
+            throw InvalidDateRangeException()
         }
 
         val atendimentos = atendimentoRepository.findByDataAtendimentoBetween(dataInicio, dataFim)
@@ -207,7 +211,7 @@ class AtendimentoService(
 
         for (atendimento in atendimentos) {
             val pet = petRepository.findById(atendimento.petId)
-                .orElseThrow { Exception("Pet não encontrado") }
+                .orElseThrow { PetNotFoundException(atendimento.petId) }
             resposta.add(AtendimentoMapper.toResponse(atendimento, pet.nome))
         }
 
@@ -224,7 +228,7 @@ class AtendimentoService(
 
         for (atendimento in atendimentos) {
             val pet = petRepository.findById(atendimento.petId)
-                .orElseThrow { Exception("Pet não encontrado") }
+                .orElseThrow { PetNotFoundException(atendimento.petId) }
             resposta.add(AtendimentoMapper.toResponse(atendimento, pet.nome))
         }
 
@@ -233,7 +237,7 @@ class AtendimentoService(
 
     fun contarAtendimentosPorPet(petId: UUID): Int {
         petRepository.findById(petId)
-            .orElseThrow { Exception("Pet não encontrado") }
+            .orElseThrow { PetNotFoundException(petId) }
         return atendimentoRepository.countByPetId(petId)
     }
 
@@ -242,7 +246,7 @@ class AtendimentoService(
         dataFim: LocalDate
     ): Int {
         if (dataInicio.isAfter(dataFim)) {
-            throw Exception("Data de início não pode ser maior que data de fim")
+            throw InvalidDateRangeException()
         }
         return atendimentoRepository.countByDataAtendimentoBetween(dataInicio, dataFim)
     }
@@ -253,7 +257,7 @@ class AtendimentoService(
 
         for (atendimento in atendimentos) {
             val pet = petRepository.findById(atendimento.petId)
-                .orElseThrow { Exception("Pet não encontrado") }
+                .orElseThrow { PetNotFoundException(atendimento.petId) }
             resposta.add(AtendimentoMapper.toResponse(atendimento, pet.nome))
         }
 

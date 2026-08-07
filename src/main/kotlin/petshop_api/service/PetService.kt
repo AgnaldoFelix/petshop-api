@@ -5,6 +5,10 @@ import org.springframework.transaction.annotation.Transactional
 import petshop_api.dto.PetRequest
 import petshop_api.dto.PetResponse
 import petshop_api.entity.Pet
+import petshop_api.exception.PetAlreadyExistsException
+import petshop_api.exception.PetNotFoundException
+import petshop_api.exception.PetsNotFoundByNameException
+import petshop_api.exception.TutorNotFoundException
 import petshop_api.mapper.PetMapper
 import petshop_api.repository.PetRepository
 import petshop_api.repository.TutorRepository
@@ -22,14 +26,14 @@ class PetService(
         val petExistente = petRepository.findByNomeAndTutorId(request.nome, request.tutorId)
 
         if (!petExistente.isEmpty()) {
-            throw Exception("Pet já cadastrado para este tutor")
+            throw PetAlreadyExistsException(request.nome, request.tutorId)
         }
 
         val pet = PetMapper.toEntity(request)
         val petSalvo = petRepository.save(pet)
 
         val tutor = tutorRepository.findById(request.tutorId)
-            .orElseThrow { Exception("Tutor não encontrado") }
+            .orElseThrow { TutorNotFoundException(request.tutorId) }
 
         return PetMapper.toResponse(petSalvo, tutor.nome)
     }
@@ -40,7 +44,7 @@ class PetService(
 
         for (pet in pets) {
             val tutor = tutorRepository.findById(pet.tutorId)
-                .orElseThrow { Exception("Tutor não encontrado") }
+                .orElseThrow { TutorNotFoundException(pet.tutorId) }
             resposta.add(PetMapper.toResponse(pet, tutor.nome))
         }
 
@@ -49,17 +53,17 @@ class PetService(
 
     fun buscarPetPorId(id: UUID): PetResponse {
         val pet = petRepository.findById(id)
-            .orElseThrow { Exception("Pet com ID $id não encontrado") }
+            .orElseThrow { PetNotFoundException(id) }
 
         val tutor = tutorRepository.findById(pet.tutorId)
-            .orElseThrow { Exception("Tutor não encontrado") }
+            .orElseThrow { TutorNotFoundException(pet.tutorId) }
 
         return PetMapper.toResponse(pet, tutor.nome)
     }
 
     fun buscarPetsPorTutor(tutorId: UUID): List<PetResponse> {
         val tutor = tutorRepository.findById(tutorId)
-            .orElseThrow { Exception("Tutor não encontrado") }
+            .orElseThrow { TutorNotFoundException(tutorId) }
 
         val pets = petRepository.findByTutorId(tutorId)
         val resposta = ArrayList<PetResponse>()
@@ -76,12 +80,12 @@ class PetService(
         val resposta = ArrayList<PetResponse>()
 
         if (pets.isEmpty()) {
-            throw Exception("Nenhum pet encontrado com o nome: $nome")
+            throw PetsNotFoundByNameException(nome)
         }
 
         for (pet in pets) {
             val tutor = tutorRepository.findById(pet.tutorId)
-                .orElseThrow { Exception("Tutor não encontrado") }
+                .orElseThrow { TutorNotFoundException(pet.tutorId) }
             resposta.add(PetMapper.toResponse(pet, tutor.nome))
         }
 
@@ -91,7 +95,7 @@ class PetService(
     @Transactional
     fun atualizarPet(id: UUID, request: PetRequest): PetResponse {
         val petExistente = petRepository.findById(id)
-            .orElseThrow { Exception("Pet com ID $id não encontrado") }
+            .orElseThrow { PetNotFoundException(id) }
 
         petExistente.nome = request.nome
         petExistente.idade = request.idade
@@ -102,7 +106,7 @@ class PetService(
         val petAtualizado = petRepository.save(petExistente)
 
         val tutor = tutorRepository.findById(petAtualizado.tutorId)
-            .orElseThrow { Exception("Tutor não encontrado") }
+            .orElseThrow { TutorNotFoundException(petAtualizado.tutorId) }
 
         return PetMapper.toResponse(petAtualizado, tutor.nome)
     }
@@ -110,7 +114,7 @@ class PetService(
     @Transactional
     fun deletarPet(id: UUID) {
         if (!petRepository.existsById(id)) {
-            throw Exception("Pet com ID $id não encontrado")
+            throw PetNotFoundException(id)
         }
         petRepository.deleteById(id)
     }

@@ -5,6 +5,9 @@ import org.springframework.transaction.annotation.Transactional
 import petshop_api.dto.VacinaRequest
 import petshop_api.dto.VacinaResponse
 import petshop_api.entity.Vacina
+import petshop_api.exception.VacinaAlreadyExistsException
+import petshop_api.exception.VacinaNotFoundByNameException
+import petshop_api.exception.VacinaNotFoundException
 import petshop_api.mapper.VacinaMapper
 import petshop_api.repository.VacinaRepository
 import java.util.ArrayList
@@ -20,7 +23,7 @@ class VacinaService(
         val vacinaExistente = vacinaRepository.findByNome(request.nome)
 
         if (vacinaExistente.isPresent) {
-            throw Exception("Vacina já cadastrada com o nome: ${request.nome}")
+            throw VacinaAlreadyExistsException(request.nome)
         }
 
         val vacina = VacinaMapper.toEntity(request)
@@ -41,20 +44,20 @@ class VacinaService(
 
     fun buscarVacinaPorId(id: UUID): VacinaResponse {
         val vacina = vacinaRepository.findById(id)
-            .orElseThrow { Exception("Vacina com ID $id não encontrada") }
+            .orElseThrow { VacinaNotFoundException(id) }
         return VacinaMapper.toResponse(vacina)
     }
 
     fun buscarVacinaPorNome(nome: String): VacinaResponse {
         val vacina = vacinaRepository.findByNome(nome)
-            .orElseThrow { Exception("Vacina com nome $nome não encontrada") }
+            .orElseThrow { VacinaNotFoundByNameException(nome) }
         return VacinaMapper.toResponse(vacina)
     }
 
     @Transactional
     fun editarVacina(id: UUID, request: VacinaRequest): VacinaResponse {
         val vacinaExistente = vacinaRepository.findById(id)
-            .orElseThrow { Exception("Vacina com ID $id não encontrada") }
+            .orElseThrow { VacinaNotFoundException(id) }
 
         vacinaExistente.nome = request.nome
         vacinaExistente.descricao = request.descricao
@@ -66,7 +69,7 @@ class VacinaService(
     @Transactional
     fun deletarVacina(id: UUID) {
         if (!vacinaRepository.existsById(id)) {
-            throw Exception("Vacina com ID $id não encontrada")
+            throw VacinaNotFoundException(id)
         }
         vacinaRepository.deleteById(id)
     }
